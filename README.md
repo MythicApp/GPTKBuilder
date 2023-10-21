@@ -1,3 +1,7 @@
-# WhiskyBuilder
+# MythicGPTKBuilder
+> Part of [Mythic](https://github.com/blackxfiied/Mythic).
 
-Automatic GPTK builder for Whisky. Originated from [HarborBuilder](https://github.com/ohaiibuzzle/HarborBuilder).
+<sub>
+  derived from <a href="https://github.com/Whisky-App/WhiskyBuilder">WhiskyBuilder</a>.
+</sub>
+
