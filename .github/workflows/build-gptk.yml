@@ -3,7 +3,7 @@ on:
   workflow_dispatch:
   push:
   schedule:
-    - cron: "0 19 * * *"
+    - cron: "0 0 * * *"
 jobs:
   build_gptk:
     name: Build GPTK
