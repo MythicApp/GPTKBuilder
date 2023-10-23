@@ -1,4 +1,5 @@
-name: Build GPTK
+name: >
+  Build Apple's Game Porting Toolkit for use with Mythic.
 on:
   workflow_dispatch:
   push:
@@ -7,7 +8,7 @@ on:
 jobs:
   build_gptk:
     name: Build GPTK
-    runs-on: macos-13
+    runs-on: macos-latest
     steps:
       - name: Checkout
         uses: actions/checkout@v3
@@ -22,7 +23,8 @@ jobs:
           path: /usr/local/Cellar/game-porting-toolkit-compiler
           key: game-porting-toolkit-compiler-0.1
           
-      - name: Install compiler
+      - name: >
+          Install compiler (If it's not already cached)
         if: steps.compiler-cache.outputs.cache-hit != 'true'
         run: brew install whisky/apple/game-porting-toolkit-compiler
         
@@ -33,7 +35,8 @@ jobs:
           key: game-porting-toolkit-compiler-0.1
           path: /usr/local/Cellar/game-porting-toolkit-compiler
           
-      - name: Relink compiler
+      - name: >
+          Relink compiler (If it's cached)
         if: steps.compiler-cache.outputs.cache-hit == 'true'
         run: |
           brew install whisky/apple/game-porting-toolkit-compiler
@@ -50,32 +53,35 @@ jobs:
           rm -rf $(brew --prefix game-porting-toolkit)/share/man
           find $(brew --prefix game-porting-toolkit)/bin -type f -not -name "wine64" -not -name "wine64-preloader" -not -name "wineserver" -delete
           find $(brew --prefix game-porting-toolkit)/bin -type l -delete
-      - name: Make Libraries folder
+          
+      - name: Create Libraries folder
         run: mkdir -p Libraries/Wine
-      - name: Copy taps
+        
+      - name: Copy taps into Libraries
         run: |
           cp -a $(brew --prefix game-porting-toolkit)/. Libraries/Wine/
           cp -a $(brew --prefix winetricks)/bin/winetricks Libraries/
-      - name: Copy external deps
-        run: |
-          cp -a libs/. Libraries/Wine/lib/
-      - name: Copy DXVK
+          
+      - name: Copy external dependencies
+        run: cp -a libs/. Libraries/Wine/lib/
+          
+      - name: Copy DXVK into Libraries
         run: cp -a DXVK Libraries/
+        
       - name: Copy Version PList
-        run: |
-          cp -a GPTKVersion.plist Libraries/
+        run: cp -a GPTKVersion.plist Libraries/
+        
       - name: Install GPTK
         run: |
           ditto GPTK/redist/lib/ Libraries/Wine/lib/
           ln -s ./external/libd3dshared.dylib Libraries/Wine/lib/libd3dshared.dylib
           ln -s ./external/D3DMetal.framework Libraries/Wine/lib/D3DMetal.framework
           
-      # - name: Tar Libraries
-        # run: |
-          # tar -zcf Libraries.tar.gz Libraries
+      - name: Compress Libraries (.tar.xz)
+        run: tar -cJf Libraries.txz Libraries
           
-      - name: Upload Libraries
+      - name: Upload Libraries Archive to GitHub
         uses: actions/upload-artifact@v3
         with:
           name: Libraries
-          path: Libraries
+          path: Libraries.txz
