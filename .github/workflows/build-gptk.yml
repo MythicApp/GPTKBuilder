@@ -11,31 +11,37 @@ jobs:
     steps:
       - name: Checkout
         uses: actions/checkout@v3
+        
       - name: Tap homebrew-apple
         run: brew tap whisky/apple http://github.com/Whisky-App/homebrew-apple
+        
       - name: Check cache for compiler
         id: compiler-cache
         uses: actions/cache@v3
         with:
           path: /usr/local/Cellar/game-porting-toolkit-compiler
           key: game-porting-toolkit-compiler-0.1
+          
       - name: Install compiler
         if: steps.compiler-cache.outputs.cache-hit != 'true'
-        run: |
-          brew install whisky/apple/game-porting-toolkit-compiler
+        run: brew install whisky/apple/game-porting-toolkit-compiler
+        
       - name: Save compiler to cache
         if: steps.compiler-cache.outputs.cache-hit != 'true'
         uses: actions/cache/save@v3
         with:
           key: game-porting-toolkit-compiler-0.1
           path: /usr/local/Cellar/game-porting-toolkit-compiler
+          
       - name: Relink compiler
         if: steps.compiler-cache.outputs.cache-hit == 'true'
         run: |
           brew install whisky/apple/game-porting-toolkit-compiler
           ln -s /usr/local/Cellar/game-porting-toolkit-compiler/0.1/ /usr/local/opt/game-porting-toolkit-compiler
+          
       - name: Install taps
         run: brew install whisky/apple/game-porting-toolkit winetricks || true
+        
       - name: Trim Files
         run: |
           rm -rf $(brew --prefix game-porting-toolkit)/.brew
@@ -45,8 +51,7 @@ jobs:
           find $(brew --prefix game-porting-toolkit)/bin -type f -not -name "wine64" -not -name "wine64-preloader" -not -name "wineserver" -delete
           find $(brew --prefix game-porting-toolkit)/bin -type l -delete
       - name: Make Libraries folder
-        run: |
-          mkdir -p Libraries/Wine
+        run: mkdir -p Libraries/Wine
       - name: Copy taps
         run: |
           cp -a $(brew --prefix game-porting-toolkit)/. Libraries/Wine/
@@ -55,9 +60,8 @@ jobs:
         run: |
           cp -a libs/. Libraries/Wine/lib/
       - name: Copy DXVK
-        run: |
-          cp -a DXVK Libraries/
-      - name: Copy Version .plist
+        run: cp -a DXVK Libraries/
+      - name: Copy Version PList
         run: |
           cp -a GPTKVersion.plist Libraries/
       - name: Install GPTK
@@ -65,12 +69,13 @@ jobs:
           ditto GPTK/redist/lib/ Libraries/Wine/lib/
           ln -s ./external/libd3dshared.dylib Libraries/Wine/lib/libd3dshared.dylib
           ln -s ./external/D3DMetal.framework Libraries/Wine/lib/D3DMetal.framework
-      - name: Tar Libraries
-        run: |
-          tar -zcf Libraries.tar.gz Libraries
+          
+      # - name: Tar Libraries
+        # run: |
+          # tar -zcf Libraries.tar.gz Libraries
+          
       - name: Upload Libraries
         uses: actions/upload-artifact@v3
         with:
           name: Libraries
-          path: Libraries.tar.gz
-      # removed whiskybucket; no auth
+          path: Libraries
