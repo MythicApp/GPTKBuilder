@@ -77,13 +77,13 @@ jobs:
           ln -s ./external/libd3dshared.dylib Libraries/Wine/lib/libd3dshared.dylib
           ln -s ./external/D3DMetal.framework Libraries/Wine/lib/D3DMetal.framework
           
-      - name: Compress Libraries (.tar.xz)
-        run: tar -cJf Libraries.txz Libraries
+      # - name: Compress Libraries (.tar.xz)
+        # run: tar -cJf Libraries.txz Libraries
           
-      - name: Upload Libraries Folder and Archive to GitHub
+      - name: Upload Libraries to GitHub
         uses: actions/upload-artifact@v3
         with:
           name: Libraries
           path: |
               Libraries
-              Libraries.txz
+          # Libraries.txz
