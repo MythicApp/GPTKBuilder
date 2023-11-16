@@ -61,16 +61,18 @@ jobs:
         run: |
           cp -a $(brew --prefix game-porting-toolkit)/. Libraries/Wine/
           cp -a $(brew --prefix winetricks)/bin/winetricks Libraries/
-          
       - name: Copy external dependencies
-        run: cp -a libs/. Libraries/Wine/lib/
-          
-      - name: Copy DXVK into Libraries
-        run: cp -a DXVK Libraries/
-        
-      - name: Copy Version PList
-        run: cp -a GPTKVersion.plist Libraries/
-        
+        run: |
+          cp -a libs/. Libraries/Wine/lib/
+      - name: Copy DXVK
+        run: |
+          cp -a DXVK Libraries/
+      - name: Copy Version .plist
+        run: |
+          cp -a GPTKVersion.plist Libraries/
+      - name: Download verbs list
+        run: |
+          curl https://raw.githubusercontent.com/Winetricks/winetricks/master/files/verbs/all.txt -o Libraries/verbs.txt
       - name: Install GPTK
         run: |
           ditto GPTK/redist/lib/ Libraries/Wine/lib/
