@@ -1,5 +1,5 @@
 name: >
-  Build Apple's Game Porting Toolkit for use with Mythic
+  Build Mythic Engine
 on:
   workflow_dispatch:
   push:
@@ -7,7 +7,7 @@ on:
     - cron: "0 0 * * *"
 jobs:
   build_gptk:
-    name: Build GPTK
+    name: Build Engine (GPTK)
     runs-on: macos-latest
     steps:
       - name: Checkout
