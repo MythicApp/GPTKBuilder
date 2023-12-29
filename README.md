@@ -14,7 +14,7 @@
   [![Discord](https://img.shields.io/discord/1154998702650425397?logo=discord)](https://discord.com/invite/58NZ7fFqPy)
 </h1>
 
-Mythic Engine is Mythic's implementation of Apple's game porting toolkit (GPTK), which combines [wine](https://www.winehq.org/) and Apple D3DMetal, to create a windows gaming experience on macOS. Similar to Proton, Mythic Engine attempts to be a emulator-like (remember, [Wine Is Not an Emulator](https://www.winehq.org/about) experience that enables native Windows games to be playable on macOS, while coming closer to native performance than ever before. (performance will vary between games)
+Mythic Engine is Mythic's implementation of Apple's game porting toolkit (GPTK), which combines [wine](https://www.winehq.org/) and Apple D3DMetal, to create a windows gaming experience on macOS. Similar to Proton, Mythic Engine attempts to be an emulator-like (remember, [Wine Is Not an Emulator](https://www.winehq.org/about)) experience that enables native Windows games to be playable on macOS, while coming closer to native performance than ever before. (performance will vary between games)
 
 <sub>
 Copyright (C) 2023 blackxfiied
